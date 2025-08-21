@@ -1,0 +1,18 @@
+# build the docker image
+# push to dockerhub
+# write script to deploy to vm
+
+name : Backend CI/CD
+
+on:
+  push:
+    branches: [ main ]   
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Docker Login
+        uses: docker/login-actions@ve   

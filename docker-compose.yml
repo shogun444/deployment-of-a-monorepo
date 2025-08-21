@@ -1,0 +1,42 @@
+services:
+  frontend :
+    build : 
+      context : ./
+      dockerfile : ./docker/dockerfile.web
+    depends_on : 
+      - postgres  
+    ports: 
+      - 8081:8081
+    environment : 
+      DATABASE_URL: postgresql://postgres:MYSECRETPASSWORD@postgres:5432/postgres
+      POSTGRES_PASSWORD : MYSECRETPASSWORD
+  backend : 
+    build : 
+      context : ./
+      dockerfile : ./docker/dockerfile.http
+      args : 
+        - DATABASE_URL=postgresql://postgres:MYSECRETPASSWORD@postgres:5432/postgres
+    depends_on : 
+      - postgres  
+    ports : 
+      - 8080:8080
+    environment : 
+      DATABASE_URL: postgresql://postgres:MYSECRETPASSWORD@postgres:5432/postgres
+      POSTGRES_PASSWORD : MYSECRETPASSWORD
+  websocket : 
+    build : 
+      context : ./
+      dockerfile : ./docker/dockerfile.ws
+    depends_on : 
+      - postgres 
+    ports : 
+      - 3000:3000 
+    environment : 
+      DATABASE_URL: postgresql://postgres:MYSECRETPASSWORD@postgres:5432/postgres
+      POSTGRES_PASSWORD : MYSECRETPASSWORD
+  postgres : 
+    image : postgres
+    ports : 
+      - 5432:5432
+    environment : 
+      POSTGRES_PASSWORD : MYSECRETPASSWORD  
